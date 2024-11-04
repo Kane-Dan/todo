@@ -42,6 +42,5 @@ onMounted(() => {
     background-color: whitesmoke;
     color: black;
     overflow: auto;
-    
 }
 </style>

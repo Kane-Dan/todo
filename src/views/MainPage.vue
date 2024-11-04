@@ -17,9 +17,9 @@ const update = () => {
         <div class="content">
 
             <TaskCreateForm @created="update" />
-            <hr/>
+            <hr />
 
-            <!-- <TodoList :updater="updater" /> -->
+            <TodoList :updater="updater" />
 
         </div>
         <div class="footer"></div>
@@ -27,7 +27,7 @@ const update = () => {
 </template>
 
 <style scoped>
-.container{
+.container {
     height: 100vh;
     width: 100%;
     max-width: 1300px;
@@ -35,21 +35,26 @@ const update = () => {
     padding: 10px;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
 }
-.header{
+
+.header {
     padding: 10px;
     font-size: 30px;
     text-align: center;
     height: 120px;
 }
-.content{
-height: 100%;
+
+.content {
+    display: flex;
+    overflow: hidden;
+    flex-direction: column;
+    height: 100%;
+    padding: 10px 0px;
 }
-.footer{
-    
+
+.footer {
+
     height: 100px;
     background-color: red;
 }
-
 </style>

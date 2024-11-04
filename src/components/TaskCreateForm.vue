@@ -1,10 +1,15 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-import MyButton from './MyButton.vue';
+import { ref, defineProps, onMounted } from 'vue'
+import MyButton from './UI/MyButton.vue';
 import axios from 'axios';
-const emit = defineEmits(['created'])
+const emit = defineEmits(['update'])
+const props = defineProps({
+    taskId: { type: Number, default: null }
+})
+
 const title = ref(null)
 const description = ref(null)
+
 // созадние таски
 const createTask = async () => {
     try {
@@ -15,12 +20,41 @@ const createTask = async () => {
             user_id: 1
         });
 
-    } catch (error) {
-        console.error(error);
+    } catch (e) {
+        console.error(e);
     }
-    emit('created')
+    emit('update')
 }
 
+const updateTask = async () => {
+    try {
+        await axios.put(`http://127.0.0.1:8000/tasks/update/${props.taskId}`, {
+            title: title.value,
+            description: description.value,
+        });
+    } catch (e) {
+        console.error(e);
+    }
+    emit('updated')
+}
+
+const getTaskById = async () => {
+    if (!props.taskId) {
+        return
+    } else {
+        try {
+            const res = await axios.get(`http://127.0.0.1:8000/tasks/${props.taskId}`)
+            title.value = res.data.title
+            description.value = res.data.description
+        } catch (e) {
+            console.error(e);
+        }
+    }
+}
+
+onMounted(() => {
+    getTaskById()
+})
 </script>
 
 
@@ -28,21 +62,20 @@ const createTask = async () => {
 <template>
 
     <div class="form">
-        
         <div class="addition">
-            <h2>Я запомню что тебе сделать за день</h2>
+            <div class="text-center">
+                <h2>Я запомню что тебе сделать за день</h2>
+            </div>
             <h4>Заголовок твоей задачи ⬊</h4>
-            <textarea name="textarea" style="resize: none;" rows="5" cols="30" minlength="3" 
-                v-model="title" />
+            <textarea class="title" name="title" style="resize: none;" rows="1" minlength="3" v-model="title" />
             <hr />
             <h4>Описание твоей задачи ⬊</h4>
-            <textarea name="textarea" style="resize: none;" rows="5" cols="30" minlength="3" 
+            <textarea class="description" name="description" style="resize: none;" rows="5" minlength="3"
                 v-model="description" />
         </div>
-        <div class="pt-3">
-            <MyButton @click="createTask">
-                create
-            </MyButton>
+        <div class="create_btn_wrapper">
+            <MyButton v-if="props.taskId" @click="updateTask">save</MyButton>
+            <MyButton v-else @click="createTask">create</MyButton>
         </div>
     </div>
 
@@ -51,11 +84,25 @@ const createTask = async () => {
 
 
 <style scoped>
+textarea {
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.title {
+    width: 100%;
+    max-width: 300px;
+}
+
+.description {
+    width: 100%;
+}
+
+
 .form {
     box-shadow: 0px 0px 23px 0px rgba(0, 0, 0, 0.1);
     padding: 10px;
     border-radius: 10px;
-    text-align: center;
     /* background-color: rgb(41, 41, 41) ; */
     background-color: whitesmoke;
     color: black;
@@ -67,17 +114,14 @@ const createTask = async () => {
     height: 100%;
 }
 
-textarea {
-    width: 90%;
-    border-radius: 10px;
-    padding: 5px;
-}
-.pt-3{
-    display: flex;
-    flex-direction: column-reverse;
+.create_btn_wrapper {
     min-width: 100px;
+    flex-direction: column-reverse;
+    display: flex;
+    /* overflow: hidden; */
 }
-h4{
+
+h4 {
     display: flex;
 }
 </style>
