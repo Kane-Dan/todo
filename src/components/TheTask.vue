@@ -41,7 +41,7 @@ const deleteTask = async (id) => {
             <MyButton @click="deleteTask(task.id)" class="mb-1">delete</MyButton>
             <MyButton @click="openModal" class="mt-1">edit</MyButton>
             <MyModal @close="$emit('update')" ref="modalRef">
-                <TaskCreateForm :task-id="task.id" @updated="$emit('update'), modalRef.close()" />
+                <TaskCreateForm :task-id="task.id" @update="$emit('update'), modalRef.close()" />
             </MyModal>
         </div>
     </div>

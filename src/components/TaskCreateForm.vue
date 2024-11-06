@@ -35,7 +35,7 @@ const updateTask = async () => {
     } catch (e) {
         console.error(e);
     }
-    emit('updated')
+    emit('update')
 }
 
 const getTaskById = async () => {
@@ -95,7 +95,7 @@ textarea {
 }
 
 .description {
-    width: 100%;
+    width: 90%;
 }
 
 

@@ -16,7 +16,7 @@ const update = () => {
         </div>
         <div class="content">
 
-            <TaskCreateForm @created="update" />
+            <TaskCreateForm @update="update" />
             <hr />
 
             <TodoList :updater="updater" />
@@ -55,6 +55,6 @@ const update = () => {
 .footer {
 
     height: 100px;
-    background-color: red;
+    
 }
 </style>
